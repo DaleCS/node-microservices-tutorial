@@ -1,0 +1,27 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently -c red,green,yellow,blue npm:dev:*",
+    "dev:posts": "npm run --prefix posts dev",
+    "dev:comments": "npm run --prefix comments dev",
+    "dev:event-bus": "npm run --prefix event-bus dev",
+    "dev:client": "npm run --prefix client start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DaleCS/node-microservices-tutorial.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DaleCS/node-microservices-tutorial/issues"
+  },
+  "homepage": "https://github.com/DaleCS/node-microservices-tutorial#readme",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^7.0.0"
+  }
+}

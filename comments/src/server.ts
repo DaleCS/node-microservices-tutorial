@@ -2,7 +2,8 @@ import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import { randomBytes } from "crypto";
 
-import { CommentsRequestBody, CommentsByPostMap, Comment } from "./types";
+import { CommentsRequestBody, CommentsByPostMap, Comment, AppEvent } from "./types";
+import axios from "axios";
 
 const app: Express = express();
 
@@ -28,8 +29,26 @@ app.post("/posts/:id/comments", async (req: Request, res: Response): Promise<voi
   const { content } = req.body as CommentsRequestBody;
   const comments: Comment[] = commentsByPostId[req.params.id] ?? [];
   comments.push({ id: commentId, content } as Comment);
+
+  await axios.post("http://localhost:4005/events", {
+    type: "CommentCreated",
+    data: {
+      id: commentId,
+      content,
+      postId: req.params.id,
+    },
+  } as AppEvent);
+
   commentsByPostId[req.params.id] = comments;
   res.status(201).json(comments);
+});
+
+// @method POST /events
+// @desc Receive events
+// @access public
+app.post("/events", async (req: Request, res: Response): Promise<void> => {
+  console.log("Received event", req.body.type);
+  res.status(200).json();
 });
 
 const PORT = process.env.PORT ?? 4001;

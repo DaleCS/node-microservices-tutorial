@@ -10,3 +10,8 @@ export interface Comment {
   id: string;
   content: string;
 }
+
+export type AppEvent = {
+  type: string;
+  data: any;
+};
