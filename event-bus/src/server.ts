@@ -16,7 +16,7 @@ app.post("/events", async (req: Request, res: Response): Promise<void> => {
 
   axios.post("http://localhost:4000/events", event);
   axios.post("http://localhost:4001/events", event);
-  // axios.post("http://localhost:4002/events", event);
+  axios.post("http://localhost:4002/events", event);
 
   res.status(200).json({ status: "OK" });
 });

@@ -33,6 +33,7 @@ function brokerEvent({ type, data }: AppEvent): void {
 // @desc Query posts and their comments
 // @access public
 app.get("/posts", async (req: Request, res: Response): Promise<void> => {
+  console.log("GET /posts");
   res.status(200).json(posts);
 });
 
@@ -40,6 +41,7 @@ app.get("/posts", async (req: Request, res: Response): Promise<void> => {
 // @desc Receive events
 // @access public
 app.post("/events", async (req: Request, res: Response): Promise<void> => {
+  console.log("Event received", (req.body as AppEvent).type);
   const event: AppEvent = req.body;
   brokerEvent(event);
   res.status(200).json();
