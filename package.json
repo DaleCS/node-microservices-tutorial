@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently -c red,green,yellow,blue npm:dev:*",
+    "dev": "concurrently -c red,green,yellow,white,blue npm:dev:*",
     "dev:posts": "npm run --prefix posts dev",
     "dev:comments": "npm run --prefix comments dev",
     "dev:event-bus": "npm run --prefix event-bus dev",
-    "dev:client": "npm run --prefix client start"
+    "dev:query": "npm run --prefix query dev",
+    "dev:client": "npm --prefix client start"
   },
   "repository": {
     "type": "git",
