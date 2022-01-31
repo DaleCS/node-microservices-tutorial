@@ -13,6 +13,7 @@ app.use(cors());
 async function eventBroker({ type, data }: AppEvent): Promise<void> {
   switch (type) {
     case "CommentModerated": {
+      console.log("Received 'CommentModerated' event");
       const comments = commentsByPostId[data.postId] ?? [];
       const commentIndex = comments.findIndex((comment: Comment) => comment.id === data.id);
       if (commentIndex > -1) {

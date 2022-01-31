@@ -25,23 +25,25 @@ function updateComment(commentsArr: Comment[], comment: Comment): void {
 function brokerEvent({ type, data }: AppEvent): void {
   switch (type) {
     case "PostCreated": {
+      console.log("Received 'PostCreated' event");
       const { id, title } = data;
       posts[id] = { id, title, comments: [] } as Post;
       break;
     }
     case "CommentCreated": {
+      console.log("Received 'CommentCreated' event");
       const { id, content, postId, status } = data;
       const post = posts[postId];
       post.comments.push({ id, content, status });
       break;
     }
     case "CommentUpdated": {
+      console.log("Received 'CommentUpdated' event");
       const post = posts[data.postId];
       updateComment(post.comments, data);
       break;
     }
     default: {
-      console.log("Unknown event; Ignoring...");
     }
   }
 }
@@ -50,7 +52,6 @@ function brokerEvent({ type, data }: AppEvent): void {
 // @desc Query posts and their comments
 // @access public
 app.get("/posts", async (req: Request, res: Response): Promise<void> => {
-  console.log("GET /posts");
   res.status(200).json(posts);
 });
 
@@ -58,7 +59,6 @@ app.get("/posts", async (req: Request, res: Response): Promise<void> => {
 // @desc Receive events
 // @access public
 app.post("/events", async (req: Request, res: Response): Promise<void> => {
-  console.log("Event received", (req.body as AppEvent).type);
   const event: AppEvent = req.body;
   brokerEvent(event);
   res.status(200).json();

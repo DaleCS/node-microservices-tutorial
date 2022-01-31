@@ -13,7 +13,7 @@ app.use(cors());
 // @desc Emit events to all listener services
 // @access publics
 app.post("/events", async (req: Request, res: Response): Promise<void> => {
-  console.log("Received event", req.body);
+  console.log(`Received '${req.body.type}' event`);
   const event: AppEvent = req.body;
 
   axios.post("http://localhost:4000/events", event); // Posts

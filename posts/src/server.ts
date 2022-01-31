@@ -16,7 +16,6 @@ const posts: PostMap = {};
 // @desc Get all posts
 // @access public
 app.get("/posts", async (req: Request, res: Response): Promise<void> => {
-  console.log("GET /posts");
   res.status(200).json(posts);
 });
 
@@ -24,7 +23,6 @@ app.get("/posts", async (req: Request, res: Response): Promise<void> => {
 // @desc Add a new post
 // @access public
 app.post("/posts", async (req: Request, res: Response): Promise<void> => {
-  console.log("POST /posts");
   const id: string = randomBytes(4).toString("hex");
   const { title } = req.body as PostsRequestBody;
   posts[id] = {
@@ -47,7 +45,6 @@ app.post("/posts", async (req: Request, res: Response): Promise<void> => {
 // @desc Receive events
 // @access public
 app.post("/events", async (req: Request, res: Response): Promise<void> => {
-  console.log("Received event", req.body.type);
   res.status(200).json();
 });
 

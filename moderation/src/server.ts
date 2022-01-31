@@ -31,9 +31,10 @@ async function moderateComment(comment: Comment): Promise<void> {
   }
 }
 
-function eventBroker({ type, data }: AppEvent): void {
+async function eventBroker({ type, data }: AppEvent): Promise<void> {
   switch (type) {
     case "CommentCreated": {
+      console.log("Received 'CommentCreated' event");
       setTimeout((): void => {
         moderateComment(data as Comment);
       }, 1000);
