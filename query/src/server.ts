@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
 
-import { PostMap, Post, AppEvent } from "./types";
+import { PostMap, Post, AppEvent, Comment } from "./types";
 
 const app: Express = express();
 
@@ -9,6 +9,18 @@ app.use(express.json());
 app.use(cors());
 
 const posts: PostMap = {};
+
+function updateComment(commentsArr: Comment[], comment: Comment): void {
+  const { id, content, status } = comment;
+  const commentIndex = commentsArr.findIndex(
+    (curComment: Comment): boolean => curComment.id === id
+  );
+  if (commentIndex > -1) {
+    commentsArr[commentIndex] = { id, content, status } as Comment;
+  } else {
+    commentsArr.push({ id, content, status } as Comment);
+  }
+}
 
 function brokerEvent({ type, data }: AppEvent): void {
   switch (type) {
@@ -18,9 +30,14 @@ function brokerEvent({ type, data }: AppEvent): void {
       break;
     }
     case "CommentCreated": {
-      const { id, content, postId } = data;
+      const { id, content, postId, status } = data;
       const post = posts[postId];
-      post.comments.push({ id, content });
+      post.comments.push({ id, content, status });
+      break;
+    }
+    case "CommentUpdated": {
+      const post = posts[data.postId];
+      updateComment(post.comments, data);
       break;
     }
     default: {

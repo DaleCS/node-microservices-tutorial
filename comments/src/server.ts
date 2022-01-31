@@ -10,6 +10,28 @@ const app: Express = express();
 app.use(express.json());
 app.use(cors());
 
+async function eventBroker({ type, data }: AppEvent): Promise<void> {
+  switch (type) {
+    case "CommentModerated": {
+      const comments = commentsByPostId[data.postId] ?? [];
+      const commentIndex = comments.findIndex((comment: Comment) => comment.id === data.id);
+      if (commentIndex > -1) {
+        comments[commentIndex] = data;
+      } else {
+        comments.push(data);
+      }
+      commentsByPostId[data.postId] = comments;
+      await axios.post("http://localhost:4005/events", {
+        type: "CommentUpdated",
+        data,
+      } as AppEvent);
+      break;
+    }
+    default: {
+    }
+  }
+}
+
 const commentsByPostId: CommentsByPostMap = {};
 
 // @method GET /posts/:id/comments
@@ -25,16 +47,21 @@ app.get("/posts/:id/comments", async (req: Request, res: Response): Promise<void
 app.post("/posts/:id/comments", async (req: Request, res: Response): Promise<void> => {
   const commentId = randomBytes(4).toString("hex");
   const { content } = req.body as CommentsRequestBody;
+
   const comments: Comment[] = commentsByPostId[req.params.id] ?? [];
-  comments.push({ id: commentId, content } as Comment);
+  const newComment: Comment = {
+    id: commentId,
+    content,
+    status: "PENDING",
+  };
+  comments.push(newComment);
 
   await axios.post("http://localhost:4005/events", {
     type: "CommentCreated",
     data: {
-      id: commentId,
-      content,
+      ...newComment,
       postId: req.params.id,
-    },
+    } as Comment,
   } as AppEvent);
 
   commentsByPostId[req.params.id] = comments;
@@ -45,7 +72,7 @@ app.post("/posts/:id/comments", async (req: Request, res: Response): Promise<voi
 // @desc Receive events
 // @access public
 app.post("/events", async (req: Request, res: Response): Promise<void> => {
-  console.log("Received event", req.body.type);
+  eventBroker(req.body as AppEvent);
   res.status(200).json();
 });
 

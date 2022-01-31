@@ -10,9 +10,9 @@ app.use(express.json());
 app.use(cors());
 
 async function moderateComment(comment: Comment): Promise<void> {
-  const { id, content, status } = comment;
+  const { content } = comment;
   const regExp = /(orange)/;
-  if (comment.content.search(regExp) > -1) {
+  if (content.search(regExp) > -1) {
     await axios.post("http://localhost:4005/events", {
       type: "CommentModerated",
       data: {
@@ -31,8 +31,7 @@ async function moderateComment(comment: Comment): Promise<void> {
   }
 }
 
-function eventBroker(appEvent: AppEvent): void {
-  const { type, data } = appEvent;
+function eventBroker({ type, data }: AppEvent): void {
   switch (type) {
     case "CommentCreated": {
       setTimeout((): void => {

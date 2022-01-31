@@ -1,10 +1,13 @@
 export type Post = {
   id: string;
   title: string;
-  comments: {
-    id: string;
-    content: string;
-  }[];
+  comments: Comment[];
+};
+
+export type Comment = {
+  id: string;
+  content: string;
+  status: "ACCEPTED" | "PENDING" | "REJECTED";
 };
 
 export type PostMap = {

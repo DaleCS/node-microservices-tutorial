@@ -9,6 +9,7 @@ export interface CommentsByPostMap {
 export interface Comment {
   id: string;
   content: string;
+  status: "ACCEPTED" | "PENDING" | "REJECTED";
 }
 
 export type AppEvent = {

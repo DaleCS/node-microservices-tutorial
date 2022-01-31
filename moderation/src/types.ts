@@ -6,5 +6,6 @@ export type AppEvent = {
 export type Comment = {
   id: string;
   content: string;
+  postId: string;
   status: "APPROVED" | "PENDING" | "REJECTED";
 };
