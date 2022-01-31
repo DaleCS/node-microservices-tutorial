@@ -16,7 +16,6 @@ const commentsByPostId: CommentsByPostMap = {};
 // @desc Get comments for a particular post
 // @access public
 app.get("/posts/:id/comments", async (req: Request, res: Response): Promise<void> => {
-  console.log("GET /posts/:id/comments");
   res.status(200).json(commentsByPostId[req.params.id] ?? []);
 });
 
@@ -24,7 +23,6 @@ app.get("/posts/:id/comments", async (req: Request, res: Response): Promise<void
 // @desc Add a new comment to a post
 // @access public
 app.post("/posts/:id/comments", async (req: Request, res: Response): Promise<void> => {
-  console.log("POST /posts/:id/comments");
   const commentId = randomBytes(4).toString("hex");
   const { content } = req.body as CommentsRequestBody;
   const comments: Comment[] = commentsByPostId[req.params.id] ?? [];
