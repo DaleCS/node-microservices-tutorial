@@ -4,19 +4,10 @@ import axios from "axios";
 import { CommentCreate } from "./CommentCreate";
 import { CommentList } from "./CommentList";
 
+import { Post, Comment } from "./types";
+
 type PostMap = {
   [prop: string]: Post;
-};
-
-type Post = {
-  id: string;
-  title: string;
-  comments: Comment[];
-};
-
-type Comment = {
-  id: string;
-  content: string;
 };
 
 export function PostList() {
