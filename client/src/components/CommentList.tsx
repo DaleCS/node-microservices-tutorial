@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { render } from "react-dom";
+import React from "react";
 
 type Comment = {
   id: string;
@@ -8,21 +6,10 @@ type Comment = {
 };
 
 type Props = {
-  postId: string;
+  comments: Comment[];
 };
 
-export function CommentList({ postId }: Props): JSX.Element {
-  const [comments, setComments] = useState<Comment[]>([]);
-
-  const fetchComments = async (): Promise<void> => {
-    const res = await axios.get(`http://localhost:4001/posts/${postId}/comments`);
-    setComments(res.data as Comment[]);
-  };
-
-  useEffect((): void => {
-    fetchComments();
-  }, []);
-
+export function CommentList({ comments }: Props): JSX.Element {
   const renderedComments = comments.map((comment: Comment): JSX.Element => {
     return <li key={comment.id}>{comment.content}</li>;
   });
